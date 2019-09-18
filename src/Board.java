@@ -34,6 +34,12 @@ class Board implements ILayout, Cloneable {
     }
 
     public String toString(){
-        return null;
+        String output="";
+        for(int i = 0 ; i<dim ; i++) {
+            for (int j = 0; j<dim; j++)
+                output += board[i][j] == 0 ? " " : board[i][j];
+            output += "\n";
+        }
+        return output;
     }
 }
