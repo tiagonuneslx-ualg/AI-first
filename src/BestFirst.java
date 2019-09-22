@@ -9,8 +9,7 @@ public class BestFirst {
         public State(ILayout l, State n) {
             layout = l;
             father = n;
-            if (father != null) g = father.g + l.getG();
-            else g = 0.0;
+            g = l.getG();
         }
 
         public String toString() {
@@ -23,13 +22,14 @@ public class BestFirst {
 
         @Override
         public Iterator<State> iterator() {
-            Stack<State> stateStack = new Stack<>();
+            List<State> states = new ArrayList<>();
             State actual = this;
             while(actual != null) {
-                stateStack.push(actual);
-                actual = father;
+                states.add(actual);
+                actual = actual.father;
             }
-            return stateStack.iterator();
+            Collections.reverse(states);
+            return states.iterator();
         }
 
         @Override
@@ -65,9 +65,11 @@ public class BestFirst {
         abertos.add(new State(s, null));
         List<State> sucs;
         while (true) {
-            if (abertos.isEmpty()) return null;
+            if (abertos.isEmpty())
+                return null;
             State actual = abertos.remove();
-            if (actual.layout.isGoal(goal)) return actual.iterator();
+            if (actual.layout.isGoal(goal))
+                return actual.iterator();
             sucs = sucessores(actual);
             fechados.add(actual);
             for (State suc : sucs) {
