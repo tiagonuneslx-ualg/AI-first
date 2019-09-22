@@ -1,11 +1,10 @@
 import java.util.ArrayList;
 import java.util.List;
 
-class Board implements ILayout, Cloneable {
+class Board implements ILayout {
     private static final int dim = 3;
     private int board[][];
     String origin;
-    private double g;
 
     public Board() {
         board = new int[dim][dim];
@@ -15,17 +14,11 @@ class Board implements ILayout, Cloneable {
         if (str.length() != dim * dim) throw new
                 IllegalStateException("Invalid arg in Board constructor");
         origin = str;
-        g = 0.0;
         board = new int[dim][dim];
         int si = 0;
         for (int i = 0; i < dim; i++)
             for (int j = 0; j < dim; j++)
                 board[i][j] = Character.getNumericValue(str.charAt(si++));
-    }
-
-    public Board(String str, double g) {
-        this(str);
-        this.g = g;
     }
 
     private Board nextBoard(int x1, int y1, int x2, int y2) {
@@ -35,7 +28,7 @@ class Board implements ILayout, Cloneable {
         char temp = origin.charAt(i);
         result_origin.setCharAt(i, origin.charAt(j));
         result_origin.setCharAt(j, temp);
-        return new Board(result_origin.toString(), g + 1.0);
+        return new Board(result_origin.toString());
     }
 
     @Override
@@ -74,7 +67,7 @@ class Board implements ILayout, Cloneable {
 
     @Override
     public double getG() {
-        return g;
+        return 1.0;
     }
 
     public String toString() {

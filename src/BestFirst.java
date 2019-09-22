@@ -9,7 +9,9 @@ public class BestFirst {
         public State(ILayout l, State n) {
             layout = l;
             father = n;
-            g = l.getG();
+            if (father != null)
+                g = father.g + l.getG();
+            else g = 0.0;
         }
 
         public String toString() {
@@ -24,7 +26,7 @@ public class BestFirst {
         public Iterator<State> iterator() {
             List<State> states = new ArrayList<>();
             State actual = this;
-            while(actual != null) {
+            while (actual != null) {
                 states.add(actual);
                 actual = actual.father;
             }
@@ -34,8 +36,8 @@ public class BestFirst {
 
         @Override
         public boolean equals(Object obj) {
-            if(obj == this) return true;
-            if(!(obj instanceof State)) return false;
+            if (obj == this) return true;
+            if (!(obj instanceof State)) return false;
             State s = (State) obj;
             return layout.equals(s.layout);
         }
