@@ -8,7 +8,7 @@ public class Main {
         BestFirst s = new BestFirst();
         Iterator<BestFirst.State> it = s.solve(new Board(sc.next()), new Board(sc.next()));
         if (it == null)
-            System.out.println("no solutionwas found");
+            System.out.println("no solution was found");
         else {
             while (it.hasNext()) {
                 BestFirst.State i = it.next();

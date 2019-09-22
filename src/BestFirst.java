@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class BestFirst {
-    static class State {
+    static class State implements Iterable<State> {
         private ILayout layout;
         private State father;
         private double g;
@@ -19,6 +19,25 @@ public class BestFirst {
 
         public double getG() {
             return g;
+        }
+
+        @Override
+        public Iterator<State> iterator() {
+            Stack<State> stateStack = new Stack<>();
+            State actual = this;
+            while(actual != null) {
+                stateStack.push(actual);
+                actual = father;
+            }
+            return stateStack.iterator();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if(obj == this) return true;
+            if(!(obj instanceof State)) return false;
+            State s = (State) obj;
+            return layout.equals(s.layout);
         }
     }
 
@@ -45,7 +64,16 @@ public class BestFirst {
         List<State> fechados = new ArrayList<>();
         abertos.add(new State(s, null));
         List<State> sucs;
-        // TO BE COMPLETED}
-        return null;
+        while (true) {
+            if (abertos.isEmpty()) return null;
+            State actual = abertos.remove();
+            if (actual.layout.isGoal(goal)) return actual.iterator();
+            sucs = sucessores(actual);
+            fechados.add(actual);
+            for (State suc : sucs) {
+                if (!fechados.contains(suc))
+                    abertos.add(suc);
+            }
+        }
     }
 }
