@@ -40,8 +40,8 @@ class BestFirst {
             return layout.toString();
         }
 
-        public double getG() {
-            return g;
+        public int getG() {
+            return (int) g;
         }
 
         @Override
@@ -62,6 +62,11 @@ class BestFirst {
             if (!(obj instanceof State)) return false;
             State s = (State) obj;
             return layout.equals(s.layout);
+        }
+
+        @Override
+        public int hashCode() {
+            return layout.toString().hashCode();
         }
     }
 
@@ -165,7 +170,12 @@ class Board implements ILayout {
         if (obj == this) return true;
         if (!(obj instanceof Board)) return false;
         Board s = (Board) obj;
-        return toString().equals(s.toString());
+        return Arrays.deepEquals(board, s.board);
+    }
+
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
     }
 
     @Override
@@ -174,15 +184,16 @@ class Board implements ILayout {
     }
 
     public String toString() {
-        String output = "";
+        StringBuilder output = new StringBuilder();
         for (int i = 0; i < dim; i++) {
             for (int j = 0; j < dim; j++)
-                output += board[i][j] == 0 ? " " : board[i][j];
-            output += "\n";
+                output.append(board[i][j] == 0 ? " " : board[i][j]);
+            output.append("\n");
         }
-        return output;
+        return output.toString();
     }
 }
+
 
 
 interface ILayout {

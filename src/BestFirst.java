@@ -18,8 +18,8 @@ public class BestFirst {
             return layout.toString();
         }
 
-        public double getG() {
-            return g;
+        public int getG() {
+            return (int) g;
         }
 
         @Override
@@ -40,6 +40,11 @@ public class BestFirst {
             if (!(obj instanceof State)) return false;
             State s = (State) obj;
             return layout.equals(s.layout);
+        }
+
+        @Override
+        public int hashCode() {
+            return layout.toString().hashCode();
         }
     }
 
