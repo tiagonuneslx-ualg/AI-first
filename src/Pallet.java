@@ -29,7 +29,7 @@ class Pallet implements ILayout, Cloneable {
         return result;
     }
 
-    private Pallet exchange(int i, int j) {
+    private Pallet exchange(int i, int j) { //exchanges 2 containers positions
         Pallet result = null;
         try {
             result = clone();
@@ -40,7 +40,7 @@ class Pallet implements ILayout, Cloneable {
         return result;
     }
 
-    private double calcG(int a, int b) {
+    private double calcG(int a, int b) {// returns the cost of an exchange between 2 pallets
         return a % 2 == 0 && b % 2 == 0 ? 20 : a % 2 == 1 && b % 2 == 1 ? 1 : 5;
     }
 
