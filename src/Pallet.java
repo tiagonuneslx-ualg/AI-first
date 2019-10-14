@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Pallet implements ILayout, Cloneable {
-    private static final int dim = 2;
+    private static final int dim = 3;
     private int[] pallet;
     private double g;
 
@@ -87,13 +87,15 @@ class Pallet implements ILayout, Cloneable {
 
     @Override
     public double getH(ILayout goal) {
-        int result = 0;
+        int np = 0, ni = 0;
         Pallet goalPallet = (Pallet) goal;
         for (int i = 0; i < dim * dim; i++) {
-            if (pallet[i] != goalPallet.pallet[i])
-                result++;
+            if (pallet[i] != goalPallet.pallet[i]) {
+                if (pallet[i] % 2 == 0) np++;
+                else ni++;
+            }
         }
-        return result;
+        return np * 5 + ni / 2;
     }
 
     public String toString() {
