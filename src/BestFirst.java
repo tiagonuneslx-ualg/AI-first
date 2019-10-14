@@ -83,16 +83,26 @@ public class BestFirst {
         return sucs;
     }
 
+    final private List<State> sucessores(State n, ILayout goal) {
+        List<State> sucs = new ArrayList<>();
+        List<ILayout> children = n.layout.children();
+        for (ILayout e : children) {
+            if (n.father == null || !e.equals(n.father.layout)) {
+                State nn = new State(e, n, goal);
+                sucs.add(nn);
+            }
+        }
+        return sucs;
+    }
+
     final public Iterator<State> solve(ILayout s, ILayout goal) {
         objective = goal;
         Queue<State> abertos = new PriorityQueue<>(10, (s1, s2) -> (int) Math.signum(s1.getG() - s2.getG()));
         List<State> fechados = new ArrayList<>();
-        abertos.add(new State(s, null));
+        abertos.offer(new State(s, null));
         List<State> sucs;
-        while (true) {
-            if (abertos.isEmpty())
-                return null;
-            State actual = abertos.remove();
+        while (!abertos.isEmpty()) {
+            State actual = abertos.poll();
             if (actual.layout.isGoal(goal))
                 return actual.iterator();
             sucs = sucessores(actual);
@@ -102,6 +112,39 @@ public class BestFirst {
                     abertos.add(suc);
             }
         }
+        return null;
     }
 
+    final public Iterator<State> solveIDA(ILayout s, ILayout goal) {
+        int counter_abertos = 0, counter_iterations = 0;
+        objective = goal;
+        Stack<State> abertos = new Stack<>();
+        int cut = new State(s, null, goal).getF();
+        while (true) {
+            abertos.push(new State(s, null, goal));
+            int nextCut = Integer.MAX_VALUE;
+            while (!abertos.isEmpty()) {
+                State actual = abertos.pop();
+                if (actual.layout.isGoal(goal)) {
+                    System.out.println("Iterations: " + counter_iterations + "  Testados: " + counter_abertos);
+                    return actual.iterator();
+                }
+                List<State> sucs = sucessores(actual, goal);
+                for (State suc : sucs) {
+                    if (suc.getF() <= cut) {
+                        abertos.push(suc);
+                        counter_abertos++;
+                    } else {
+                        int f = suc.getF();
+                        if (f < nextCut)
+                            nextCut = f;
+                    }
+                }
+            }
+            if (nextCut > cut) {
+                cut = nextCut;
+                counter_iterations++;
+            } else return null;
+        }
+    }
 }
