@@ -23,7 +23,7 @@ class Pallet implements ILayout, Cloneable {
         Pallet result = (Pallet) super.clone();
         result.pallet = new int[dim * dim];
         for (int i = 0; i < pallet.length; i++) {
-            result.pallet[i]=pallet[i];
+            result.pallet[i] = pallet[i];
         }
         result.g = g;
         return result;
@@ -83,6 +83,17 @@ class Pallet implements ILayout, Cloneable {
     @Override
     public double getG() {
         return g;
+    }
+
+    @Override
+    public double getH(ILayout goal) {
+        int result = 0;
+        Pallet goalPallet = (Pallet) goal;
+        for (int i = 0; i < dim * dim; i++) {
+            if (pallet[i] != goalPallet.pallet[i])
+                result++;
+        }
+        return result;
     }
 
     public String toString() {
