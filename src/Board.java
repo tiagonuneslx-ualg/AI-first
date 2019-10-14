@@ -80,6 +80,11 @@ class Board implements ILayout {
         return 1.0;
     }
 
+    @Override
+    public double getH(ILayout goal) {
+        return 0;
+    }
+
     public String toString() {
         StringBuilder output = new StringBuilder();
         for (int i = 0; i < dim; i++) {
