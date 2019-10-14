@@ -4,7 +4,8 @@ public class BestFirst {
     static class State implements Iterable<State> {
         private ILayout layout;
         private State father;
-        private double g;
+        private double g; // Sum of individual operation costs
+        private double h;
 
         public State(ILayout l, State n) {
             layout = l;
@@ -14,12 +15,29 @@ public class BestFirst {
             else g = 0.0;
         }
 
+        public State(ILayout l, State n, ILayout goal) {
+            layout = l;
+            father = n;
+            if (father != null)
+                g = father.g + l.getG();
+            else g = 0.0;
+            h = l.getH(goal);
+        }
+
         public String toString() {
             return layout.toString();
         }
 
         public int getG() {
             return (int) g;
+        }
+
+        public int getH() {
+            return (int) h;
+        }
+
+        public int getF() {
+            return getG() + getH();
         }
 
         @Override
@@ -85,4 +103,5 @@ public class BestFirst {
             }
         }
     }
+
 }
