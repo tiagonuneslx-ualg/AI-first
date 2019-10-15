@@ -66,11 +66,6 @@ public class BestFirst {
         }
     }
 
-    protected Queue<State> abertos;
-    private List<State> fechados;
-    private State actual;
-    private ILayout objective;
-
     final private List<State> sucessores(State n) {
         List<State> sucs = new ArrayList<>();
         List<ILayout> children = n.layout.children();
@@ -96,7 +91,6 @@ public class BestFirst {
     }
 
     final public Iterator<State> solve(ILayout s, ILayout goal) {
-        objective = goal;
         Queue<State> abertos = new PriorityQueue<>(10, (s1, s2) -> (int) Math.signum(s1.getG() - s2.getG()));
         List<State> fechados = new ArrayList<>();
         abertos.offer(new State(s, null));
@@ -117,8 +111,8 @@ public class BestFirst {
 
     final public Iterator<State> solveIDA(ILayout s, ILayout goal) {
         int counter_abertos = 0, counter_iterations = 1;
-        objective = goal;
         Stack<State> abertos = new Stack<>();
+        List<State> fechados = new ArrayList<>();
         int cut = new State(s, null, goal).getF();
         while (true) {
             abertos.push(new State(s, null, goal));
@@ -128,19 +122,23 @@ public class BestFirst {
                 if (actual.layout.isGoal(goal)) {
                     return actual.iterator();
                 }
+                fechados.add(actual);
                 List<State> sucs = sucessores(actual, goal);
                 for (State suc : sucs) {
-                    if (suc.getF() <= cut) {
-                        abertos.push(suc);
-                        counter_abertos++;
-                        System.out.println("Iterations: " + counter_iterations + "  Testados: " + counter_abertos + " Cut: " + cut);
-                    } else {
-                        int f = suc.getF();
-                        if (f < nextCut)
-                            nextCut = f;
+                    if (!fechados.contains(suc)) {
+                        if (suc.getF() <= cut) {
+                            abertos.push(suc);
+                            counter_abertos++;
+                            System.out.println("Iterations: " + counter_iterations + "  Testados: " + counter_abertos + " Cut: " + cut);
+                        } else {
+                            int f = suc.getF();
+                            if (f < nextCut)
+                                nextCut = f;
+                        }
                     }
                 }
             }
+            fechados.clear();
             if (nextCut > cut) {
                 cut = nextCut;
                 counter_iterations++;
