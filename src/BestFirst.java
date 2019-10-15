@@ -126,7 +126,6 @@ public class BestFirst {
             while (!abertos.isEmpty()) {
                 State actual = abertos.pop();
                 if (actual.layout.isGoal(goal)) {
-                    //System.out.println("Iterations: " + counter_iterations + "  Testados: " + counter_abertos + " Cut: " + cut);
                     return actual.iterator();
                 }
                 List<State> sucs = sucessores(actual, goal);
@@ -134,6 +133,7 @@ public class BestFirst {
                     if (suc.getF() <= cut) {
                         abertos.push(suc);
                         counter_abertos++;
+                        System.out.println("Iterations: " + counter_iterations + "  Testados: " + counter_abertos + " Cut: " + cut);
                     } else {
                         int f = suc.getF();
                         if (f < nextCut)

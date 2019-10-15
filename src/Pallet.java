@@ -98,6 +98,7 @@ class Pallet implements ILayout, Cloneable {
         return np * 5;
     }
 
+    @Override
     public String toString() {
         StringBuilder output = new StringBuilder();
         for (int i = 0; i < dim; i++) {
