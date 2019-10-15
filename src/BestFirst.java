@@ -116,7 +116,7 @@ public class BestFirst {
     }
 
     final public Iterator<State> solveIDA(ILayout s, ILayout goal) {
-        int counter_abertos = 0, counter_iterations = 0;
+        int counter_abertos = 0, counter_iterations = 1;
         objective = goal;
         Stack<State> abertos = new Stack<>();
         int cut = new State(s, null, goal).getF();
@@ -126,7 +126,7 @@ public class BestFirst {
             while (!abertos.isEmpty()) {
                 State actual = abertos.pop();
                 if (actual.layout.isGoal(goal)) {
-                    System.out.println("Iterations: " + counter_iterations + "  Testados: " + counter_abertos);
+                    //System.out.println("Iterations: " + counter_iterations + "  Testados: " + counter_abertos + " Cut: " + cut);
                     return actual.iterator();
                 }
                 List<State> sucs = sucessores(actual, goal);

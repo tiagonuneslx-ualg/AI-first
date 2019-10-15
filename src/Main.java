@@ -23,7 +23,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         BestFirst s = new BestFirst();
-        Iterator<BestFirst.State> it = s.solveIDA(new Pallet(sc.next()), new Pallet(sc.next()));
+        Iterator<BestFirst.State> it = s.solveIDA(new Pallet(sc.next(), 3), new Pallet(sc.next(), 3));
         if (it == null)
             System.out.println("no solution was found");
         else {

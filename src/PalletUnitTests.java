@@ -10,7 +10,7 @@ public class PalletUnitTests {
 
     @Test
     public void testConstructor() {
-        Pallet b = new Pallet("1324");
+        Pallet b = new Pallet("1324", 2);
         StringWriter writer = new StringWriter();
         PrintWriter pw = new PrintWriter(writer);
         pw.println("13");
@@ -20,9 +20,9 @@ public class PalletUnitTests {
     }
 
     @Test
-    public void testSolve() {
-        Pallet initial = new Pallet("1324");
-        Pallet goal = new Pallet("1234");
+    public void testSolve_dim2() {
+        Pallet initial = new Pallet("1324", 2);
+        Pallet goal = new Pallet("1234", 2);
         BestFirst s = new BestFirst();
         Iterator<BestFirst.State> it = s.solve(initial, goal);
         int result = -1;
@@ -39,9 +39,9 @@ public class PalletUnitTests {
     }
 
     @Test
-    public void testSolve2() {
-        Pallet initial = new Pallet("1432");
-        Pallet goal = new Pallet("1234");
+    public void testSolve_dim2_2() {
+        Pallet initial = new Pallet("1432", 2);
+        Pallet goal = new Pallet("1234", 2);
         BestFirst s = new BestFirst();
         Iterator<BestFirst.State> it = s.solve(initial, goal);
         int result = -1;
@@ -58,9 +58,9 @@ public class PalletUnitTests {
     }
 
     @Test
-    public void testSolve3() {
-        Pallet initial = new Pallet("1234");
-        Pallet goal = new Pallet("3214");
+    public void testSolve_dim2_3() {
+        Pallet initial = new Pallet("1234", 2);
+        Pallet goal = new Pallet("3214", 2);
         BestFirst s = new BestFirst();
         Iterator<BestFirst.State> it = s.solve(initial, goal);
         int result = -1;
@@ -77,9 +77,9 @@ public class PalletUnitTests {
     }
 
     @Test
-    public void testSolveIDA() {
-        Pallet initial = new Pallet("1324");
-        Pallet goal = new Pallet("1234");
+    public void testSolveIDA_dim2_1() {
+        Pallet initial = new Pallet("1324", 2);
+        Pallet goal = new Pallet("1234", 2);
         BestFirst s = new BestFirst();
         Iterator<BestFirst.State> it = s.solveIDA(initial, goal);
         int result = -1;
@@ -96,9 +96,9 @@ public class PalletUnitTests {
     }
 
     @Test
-    public void testSolveIDA2() {
-        Pallet initial = new Pallet("1432");
-        Pallet goal = new Pallet("1234");
+    public void testSolveIDA_dim2_2() {
+        Pallet initial = new Pallet("1432", 2);
+        Pallet goal = new Pallet("1234", 2);
         BestFirst s = new BestFirst();
         Iterator<BestFirst.State> it = s.solveIDA(initial, goal);
         int result = -1;
@@ -115,9 +115,9 @@ public class PalletUnitTests {
     }
 
     @Test
-    public void testSolveIDA3() {
-        Pallet initial = new Pallet("1234");
-        Pallet goal = new Pallet("3214");
+    public void testSolveIDA_dim2_3() {
+        Pallet initial = new Pallet("1234", 2);
+        Pallet goal = new Pallet("3214", 2);
         BestFirst s = new BestFirst();
         Iterator<BestFirst.State> it = s.solveIDA(initial, goal);
         int result = -1;
@@ -132,4 +132,5 @@ public class PalletUnitTests {
         }
         assertEquals(1, result);
     }
+
 }

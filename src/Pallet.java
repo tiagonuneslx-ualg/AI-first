@@ -2,25 +2,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Pallet implements ILayout, Cloneable {
-    private static final int dim = 3;
+    private int dim;
     private int[] pallet;
     private double g;
 
-    public Pallet() {
+    public Pallet(int dim) {
+        this.dim = dim;
         pallet = new int[dim * dim];
     }
 
-    public Pallet(String str) throws IllegalStateException {
+    public Pallet(String str, int dim) throws IllegalStateException {
+        this(dim);
         if (str.length() != dim * dim) throw new
                 IllegalStateException("Invalid arg in Board constructor");
-        pallet = new int[dim * dim];
-        int si = 0;
         for (int i = 0; i < dim * dim; i++)
-            pallet[i] = Character.getNumericValue(str.charAt(si++));
+            pallet[i] = Character.getNumericValue(str.charAt(i));
     }
 
     protected Pallet clone() throws CloneNotSupportedException {
         Pallet result = (Pallet) super.clone();
+        result.dim = dim;
         result.pallet = new int[dim * dim];
         for (int i = 0; i < pallet.length; i++) {
             result.pallet[i] = pallet[i];
@@ -87,15 +88,14 @@ class Pallet implements ILayout, Cloneable {
 
     @Override
     public double getH(ILayout goal) {
-        int np = 0, ni = 0;
+        int np = 0;
         Pallet goalPallet = (Pallet) goal;
         for (int i = 0; i < dim * dim; i++) {
             if (pallet[i] != goalPallet.pallet[i]) {
                 if (pallet[i] % 2 == 0) np++;
-                else ni++;
             }
         }
-        return np * 5 + ni / 2;
+        return np * 5;
     }
 
     public String toString() {
