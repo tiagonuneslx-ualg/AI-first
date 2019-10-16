@@ -88,14 +88,19 @@ class Pallet implements ILayout, Cloneable {
 
     @Override
     public double getH(ILayout goal) {
-        int np = 0;
+        double result = 0;
+        int np = 0, ni = 0;
         Pallet goalPallet = (Pallet) goal;
         for (int i = 0; i < dim * dim; i++) {
             if (pallet[i] != goalPallet.pallet[i]) {
                 if (pallet[i] % 2 == 0) np++;
+                else ni++;
             }
         }
-        return np * 5;
+        result += np * 5;
+        if (ni > np)
+            result += (ni - np + 1) / 2;
+        return result;
     }
 
     @Override
