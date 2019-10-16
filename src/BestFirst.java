@@ -112,7 +112,7 @@ public class BestFirst {
     final public Iterator<State> solveIDA(ILayout s, ILayout goal) {
         int counter_abertos = 0, counter_iterations = 1;
         Stack<State> abertos = new Stack<>();
-        List<State> fechados = new ArrayList<>();
+        HashSet<State> fechados = new HashSet<>();
         int cut = new State(s, null, goal).getF();
         while (true) {
             abertos.push(new State(s, null, goal));
