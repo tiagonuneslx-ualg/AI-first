@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class BestFirst implements Search<BestFirst.State> {
+public class IDAStar implements Search<IDAStar.State> {
 
     private List<State> sucessores(State n) {
         List<State> sucs = new ArrayList<>();
@@ -16,22 +16,40 @@ public class BestFirst implements Search<BestFirst.State> {
 
     @Override
     final public Iterator<State> solve(ILayout s, ILayout goal) {
-        Queue<State> abertos = new PriorityQueue<>(10, (s1, s2) -> (int) Math.signum(s1.getG() - s2.getG()));
-        List<State> fechados = new ArrayList<>();
-        abertos.offer(new State(s, null));
-        List<State> sucs;
-        while (!abertos.isEmpty()) {
-            State actual = abertos.poll();
-            if (actual.layout.isGoal(goal))
-                return actual.iterator();
-            sucs = sucessores(actual);
-            fechados.add(actual);
-            for (State suc : sucs) {
-                if (!fechados.contains(suc))
-                    abertos.add(suc);
+        int counter_abertos = 0, counter_iterations = 1;
+        Stack<State> abertos = new Stack<>();
+        HashSet<State> fechados = new HashSet<>();
+        int cut = new State(s, null).getF(goal);
+        while (true) {
+            abertos.push(new State(s, null));
+            int nextCut = Integer.MAX_VALUE;
+            while (!abertos.isEmpty()) {
+                State actual = abertos.pop();
+                if (actual.layout.isGoal(goal)) {
+                    return actual.iterator();
+                }
+                fechados.add(actual);
+                List<State> sucs = sucessores(actual);
+                for (State suc : sucs) {
+                    if (!fechados.contains(suc)) {
+                        if (suc.getF(goal) <= cut) {
+                            abertos.push(suc);
+                            counter_abertos++;
+                            System.out.println("Iterations: " + counter_iterations + "  Testados: " + counter_abertos + " Cut: " + cut);
+                        } else {
+                            int f = suc.getF(goal);
+                            if (f < nextCut)
+                                nextCut = f;
+                        }
+                    }
+                }
             }
+            fechados.clear();
+            if (nextCut > cut) {
+                cut = nextCut;
+                counter_iterations++;
+            } else return null;
         }
-        return null;
     }
 
     static class State implements Iterable<State> {
@@ -47,12 +65,21 @@ public class BestFirst implements Search<BestFirst.State> {
             else g = 0.0;
         }
 
+        @Override
         public String toString() {
             return layout.toString();
         }
 
         public int getG() {
             return (int) g;
+        }
+
+        public int getH(ILayout goal) {
+            return (int) layout.getH(goal);
+        }
+
+        public int getF(ILayout goal) {
+            return getG() + getH(goal);
         }
 
         @Override
