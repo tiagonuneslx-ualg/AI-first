@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 
 public class PalletUnitTests {
 
-    @Test
+    @Test(timeout = 60000)
     public void testConstructor() {
         Pallet b = new Pallet("1324", 2);
         StringWriter writer = new StringWriter();
@@ -19,7 +19,7 @@ public class PalletUnitTests {
         pw.close();
     }
 
-    @Test
+    @Test(timeout = 60000)
     public void test_IDAStar_dim2_1() {
         Pallet initial = new Pallet("1324", 2);
         Pallet goal = new Pallet("1234", 2);
@@ -38,7 +38,7 @@ public class PalletUnitTests {
         assertEquals(5, result);
     }
 
-    @Test
+    @Test(timeout = 60000)
     public void test_IDAStar_dim2_2() {
         Pallet initial = new Pallet("1432", 2);
         Pallet goal = new Pallet("1234", 2);
@@ -57,7 +57,7 @@ public class PalletUnitTests {
         assertEquals(15, result);
     }
 
-    @Test
+    @Test(timeout = 60000)
     public void test_IDAStar_dim2_3() {
         Pallet initial = new Pallet("1234", 2);
         Pallet goal = new Pallet("3214", 2);
@@ -76,7 +76,7 @@ public class PalletUnitTests {
         assertEquals(1, result);
     }
 
-    @Test
+    @Test(timeout = 60000)
     public void test_IDAStar_dim3_1() {
         Pallet initial = new Pallet("123456789", 3);
         Pallet goal = new Pallet("213456789", 3);
@@ -95,7 +95,7 @@ public class PalletUnitTests {
         assertEquals(5, result);
     }
 
-    @Test
+    @Test(timeout = 60000)
     public void test_IDAStar_dim3_2() {
         Pallet initial = new Pallet("123456789", 3);
         Pallet goal = new Pallet("143256789", 3);

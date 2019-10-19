@@ -99,7 +99,7 @@ class Pallet implements ILayout, Cloneable {
         }
         result += np * 5;
         if (ni > np)
-            result += (ni - np + 1) / 2;
+            result += (double) (ni - np) / 2 + 0.5;
         return result;
     }
 
