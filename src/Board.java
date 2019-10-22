@@ -3,12 +3,8 @@ import java.util.List;
 
 class Board implements ILayout {
     private static final int dim = 3;
-    private int board[][];
-    String origin;
-
-    public Board() {
-        board = new int[dim][dim];
-    }
+    private int[][] board;
+    private String origin;
 
     public Board(String str) throws IllegalStateException {
         if (str.length() != dim * dim) throw new

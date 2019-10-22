@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class BestFirst extends Search {
+public class AStar extends Search {
 
     private List<State> sucessores(State n) {
         List<State> sucs = new ArrayList<>();
@@ -16,7 +16,7 @@ public class BestFirst extends Search {
 
     @Override
     final public Iterator<State> solve(ILayout s, ILayout goal) {
-        Queue<State> abertos = new PriorityQueue<>(10, (s1, s2) -> (int) Math.signum(s1.getG() - s2.getG()));
+        Queue<State> abertos = new PriorityQueue<>(10, (s1, s2) -> (int) Math.signum(s1.getF(goal) - s2.getF(goal)));
         HashSet<State> fechados = new HashSet<>();
         abertos.offer(new State(s, null));
         List<State> sucs;

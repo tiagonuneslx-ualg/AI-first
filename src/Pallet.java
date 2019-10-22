@@ -6,15 +6,12 @@ class Pallet implements ILayout, Cloneable {
     private int[] pallet;
     private double g;
 
-    public Pallet(int dim) {
-        this.dim = dim;
-        pallet = new int[dim * dim];
-    }
-
-    public Pallet(String str, int dim) throws IllegalStateException {
-        this(dim);
-        if (str.length() != dim * dim) throw new
+    public Pallet(String str) throws IllegalStateException {
+        double sqrt = Math.sqrt(str.length());
+        dim = (int) sqrt;
+        if (dim != sqrt) throw new
                 IllegalStateException("Invalid arg in Board constructor");
+        pallet = new int[dim * dim];
         for (int i = 0; i < dim * dim; i++)
             pallet[i] = Character.getNumericValue(str.charAt(i));
     }
@@ -23,9 +20,7 @@ class Pallet implements ILayout, Cloneable {
         Pallet result = (Pallet) super.clone();
         result.dim = dim;
         result.pallet = new int[dim * dim];
-        for (int i = 0; i < pallet.length; i++) {
-            result.pallet[i] = pallet[i];
-        }
+        System.arraycopy(pallet, 0, result.pallet, 0, pallet.length);
         result.g = g;
         return result;
     }
@@ -50,9 +45,12 @@ class Pallet implements ILayout, Cloneable {
         List<ILayout> result = new ArrayList<>();
         for (int i = 0; i < dim * dim - 1; i++) {
             for (int j = i + 1; j < dim * dim; j++) {
-                Pallet child = exchange(i, j);
-                child.g = calcG(pallet[i], pallet[j]);
-                result.add(child);
+                double g = calcG(pallet[i], pallet[j]);
+                if (g != 20) {
+                    Pallet child = exchange(i, j);
+                    child.g = calcG(pallet[i], pallet[j]);
+                    result.add(child);
+                }
             }
         }
         return result;

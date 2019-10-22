@@ -8,9 +8,27 @@ import static org.junit.Assert.assertEquals;
 
 public class PalletUnitTests {
 
+    public static void test(String initial_s, String goal_s, int expected) {
+        Pallet initial = new Pallet(initial_s);
+        Pallet goal = new Pallet(goal_s);
+        Search s = new IDAStar();
+        Iterator<Search.State> it = s.solve(initial, goal);
+        int result = -1;
+        if (it == null)
+            System.out.println("no solution was found");
+        else {
+            while (it.hasNext()) {
+                Search.State i = it.next();
+                if (!it.hasNext())
+                    result = i.getG();
+            }
+        }
+        assertEquals(expected, result);
+    }
+
     @Test(timeout = 60000)
     public void testConstructor() {
-        Pallet b = new Pallet("1324", 2);
+        Pallet b = new Pallet("1324");
         StringWriter writer = new StringWriter();
         PrintWriter pw = new PrintWriter(writer);
         pw.println("13");
@@ -20,136 +38,38 @@ public class PalletUnitTests {
     }
 
     @Test(timeout = 60000)
-    public void test_IDAStar_dim2_1() {
-        Pallet initial = new Pallet("1324", 2);
-        Pallet goal = new Pallet("1234", 2);
-        IDAStar s = new IDAStar();
-        Iterator<IDAStar.State> it = s.solve(initial, goal);
-        int result = -1;
-        if (it == null)
-            System.out.println("no solution was found");
-        else {
-            while (it.hasNext()) {
-                IDAStar.State i = it.next();
-                if (!it.hasNext())
-                    result = i.getG();
-            }
-        }
-        assertEquals(5, result);
+    public void test_dim2_1() {
+        test("1324", "1234", 5);
     }
 
     @Test(timeout = 60000)
-    public void test_IDAStar_dim2_2() {
-        Pallet initial = new Pallet("1432", 2);
-        Pallet goal = new Pallet("1234", 2);
-        IDAStar s = new IDAStar();
-        Iterator<IDAStar.State> it = s.solve(initial, goal);
-        int result = -1;
-        if (it == null)
-            System.out.println("no solution was found");
-        else {
-            while (it.hasNext()) {
-                IDAStar.State i = it.next();
-                if (!it.hasNext())
-                    result = i.getG();
-            }
-        }
-        assertEquals(15, result);
+    public void test_dim2_2() {
+        test("1432", "1234", 15);
     }
 
     @Test(timeout = 60000)
-    public void test_IDAStar_dim2_3() {
-        Pallet initial = new Pallet("1234", 2);
-        Pallet goal = new Pallet("3214", 2);
-        IDAStar s = new IDAStar();
-        Iterator<IDAStar.State> it = s.solve(initial, goal);
-        int result = -1;
-        if (it == null)
-            System.out.println("no solution was found");
-        else {
-            while (it.hasNext()) {
-                IDAStar.State i = it.next();
-                if (!it.hasNext())
-                    result = i.getG();
-            }
-        }
-        assertEquals(1, result);
+    public void test_dim2_3() {
+        test("1234", "3214", 1);
     }
 
     @Test(timeout = 60000)
-    public void test_IDAStar_dim3_1() {
-        Pallet initial = new Pallet("123456789", 3);
-        Pallet goal = new Pallet("213456789", 3);
-        IDAStar s = new IDAStar();
-        Iterator<IDAStar.State> it = s.solve(initial, goal);
-        int result = -1;
-        if (it == null)
-            System.out.println("no solution was found");
-        else {
-            while (it.hasNext()) {
-                IDAStar.State i = it.next();
-                if (!it.hasNext())
-                    result = i.getG();
-            }
-        }
-        assertEquals(5, result);
+    public void test_dim3_1() {
+        test("123456789", "213456789", 5);
     }
 
     @Test(timeout = 60000)
-    public void test_IDAStar_dim3_2() {
-        Pallet initial = new Pallet("123456789", 3);
-        Pallet goal = new Pallet("143256789", 3);
-        IDAStar s = new IDAStar();
-        Iterator<IDAStar.State> it = s.solve(initial, goal);
-        int result = -1;
-        if (it == null)
-            System.out.println("no solution was found");
-        else {
-            while (it.hasNext()) {
-                IDAStar.State i = it.next();
-                if (!it.hasNext())
-                    result = i.getG();
-            }
-        }
-        assertEquals(15, result);
+    public void test_dim3_2() {
+        test("123456789", "143256789", 15);
     }
 
     @Test(timeout = 60000)
-    public void test_IDAStar_dim3_3() {
-        Pallet initial = new Pallet("123456789", 3);
-        Pallet goal = new Pallet("576891324", 3);
-        IDAStar s = new IDAStar();
-        Iterator<IDAStar.State> it = s.solve(initial, goal);
-        int result = -1;
-        if (it == null)
-            System.out.println("no solution was found");
-        else {
-            while (it.hasNext()) {
-                IDAStar.State i = it.next();
-                if (!it.hasNext())
-                    result = i.getG();
-            }
-        }
-        assertEquals(24, result);
+    public void test_dim3_3() {
+        test("123456789", "576891324", 24);
     }
 
     @Test(timeout = 60000)
-    public void test_IDAStar_dim3_4() {
-        Pallet initial = new Pallet("123456789", 3);
-        Pallet goal = new Pallet("987654321", 3);
-        IDAStar s = new IDAStar();
-        Iterator<IDAStar.State> it = s.solve(initial, goal);
-        int result = -1;
-        if (it == null)
-            System.out.println("no solution was found");
-        else {
-            while (it.hasNext()) {
-                IDAStar.State i = it.next();
-                if (!it.hasNext())
-                    result = i.getG();
-            }
-        }
-        assertEquals(32, result);
+    public void test_dim3_4() {
+        test("123456789", "987654321", 32);
     }
 
 }
