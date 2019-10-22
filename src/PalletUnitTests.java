@@ -72,4 +72,18 @@ public class PalletUnitTests {
         test("123456789", "987654321", 32);
     }
 
+    @Test(timeout = 60000)
+    public void test_dim4_1() {
+        test("123456789ABCDEFG", "214356789ABCGEFD", 15);
+    }
+
+    @Test(timeout = 60000)
+    public void test_dim4_2() {
+        test("123456789ABCDEFG", "GFEDCBA987654321", 40);
+    }
+
+    @Test(timeout = 60000)
+    public void test_dim4_3() {
+        test("123456789ABCDEFGHIJKLMNOP", "213456789PBCDEFGHIJKLMNOA", 10);
+    }
 }
