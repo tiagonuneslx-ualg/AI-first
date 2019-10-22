@@ -18,10 +18,8 @@ class Pallet implements ILayout, Cloneable {
 
     protected Pallet clone() throws CloneNotSupportedException {
         Pallet result = (Pallet) super.clone();
-        result.dim = dim;
         result.pallet = new int[dim * dim];
         System.arraycopy(pallet, 0, result.pallet, 0, pallet.length);
-        result.g = g;
         return result;
     }
 

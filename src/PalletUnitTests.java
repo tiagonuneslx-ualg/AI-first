@@ -83,7 +83,7 @@ public class PalletUnitTests {
     }
 
     @Test(timeout = 60000)
-    public void test_dim4_3() {
+    public void test_dim5_1() {
         test("123456789ABCDEFGHIJKLMNOP", "213456789PBCDEFGHIJKLMNOA", 10);
     }
 }
