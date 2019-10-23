@@ -6,20 +6,12 @@ import java.util.Iterator;
 
 import static org.junit.Assert.assertEquals;
 
-/*
-
-Tests with Runtime Error:
-
-
-
- */
-
 public class PalletUnitTests {
 
     public static void test(String initial_s, String goal_s, int expected) {
         Pallet initial = new Pallet(initial_s);
         Pallet goal = new Pallet(goal_s);
-        Search s = new IDAStar();
+        Search s = new IDAStarRecursive();
         Iterator<Search.State> it = s.solve(initial, goal);
         int result = -1;
         if (it == null)
@@ -79,6 +71,11 @@ public class PalletUnitTests {
     @Test(timeout = 60000)
     public void test_dim3_4() {
         test("123456789", "987654321", 32);
+    }
+
+    @Test(timeout = 60000)
+    public void test_dim3_5() {
+        test("123456789", "134256789", 10);
     }
 
     @Test(timeout = 60000)

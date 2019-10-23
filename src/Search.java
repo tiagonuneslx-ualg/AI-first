@@ -21,7 +21,7 @@ public abstract class Search {
     public static class State implements Iterable<State> {
         public ILayout layout;
         public State father;
-        private double g;
+        private int g;
 
         /**
          * @param l a config
@@ -31,8 +31,8 @@ public abstract class Search {
             layout = l;
             father = n;
             if (father != null)
-                g = father.g + l.getG();
-            else g = 0.0;
+                g = father.g + (int) l.getG();
+            else g = 0;
         }
 
         /**
@@ -44,7 +44,7 @@ public abstract class Search {
         }
 
         public int getG() {
-            return (int) g;
+            return g;
         }
 
         public int getH(ILayout goal) {

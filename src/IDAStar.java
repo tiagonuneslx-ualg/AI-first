@@ -40,6 +40,7 @@ public class IDAStar extends Search {
         int cut = new State(s, null).getH(goal);
         while(true) {
             iterations++;
+            System.out.println("Cut: " + cut);
             HashSet<State> fechados = new HashSet<>();
             abertos.push(new State(s, null));
             int nextCut = Integer.MAX_VALUE;

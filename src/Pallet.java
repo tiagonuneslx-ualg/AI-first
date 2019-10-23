@@ -87,7 +87,7 @@ public class Pallet implements ILayout, Cloneable {
      */
     @Override
     public boolean isGoal(ILayout goal) {
-        return equals((Pallet) goal);
+        return equals(goal);
     }
 
     /**
@@ -127,18 +127,31 @@ public class Pallet implements ILayout, Cloneable {
      */
     @Override
     public double getH(ILayout goal) {
-        double result = 0;
-        int np = 0, ni = 0;
+        int np = 0, ni = 0, ni_in_i = 0;
         Pallet goalPallet = (Pallet) goal;
         for(int i = 0; i < dim * dim; i++) {
             if(pallet[i] != goalPallet.pallet[i]) {
                 if(pallet[i] % 2 == 0) np++;
-                else ni++;
+                else {
+                    ni++;
+                    if(goalPallet.pallet[i] % 2 == 1) ni_in_i++;
+                }
             }
         }
-        result += np * 5;
+        /*
         if(ni > np)
-            result += (double) (ni - np) / 2 + 0.5;
+            result = np * 5 + (double) (ni - np) / 2 + 0.5;
+        else if (ni == 0 && np > 0)
+            result = np * 5 + 5;
+        else
+            result = np * 5;
+        return result;
+         */
+        double result = np * 5;
+        if(ni == 0 && np > 0) result += 5;
+        else {
+            result += (int) ((double) (ni_in_i / 2) + 0.5);
+        }
         return result;
     }
 

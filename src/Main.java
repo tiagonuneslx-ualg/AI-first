@@ -4,7 +4,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        Search s = new IDAStar();
+        Search s = new IDAStarRecursive();
         Iterator<Search.State> it = s.solve(new Pallet(sc.next()), new Pallet(sc.next()));
         if (it == null)
             System.out.println("no solution was found");
