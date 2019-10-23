@@ -6,6 +6,14 @@ import java.util.Iterator;
 
 import static org.junit.Assert.assertEquals;
 
+/*
+
+Tests with Runtime Error:
+
+
+
+ */
+
 public class PalletUnitTests {
 
     public static void test(String initial_s, String goal_s, int expected) {
@@ -19,6 +27,7 @@ public class PalletUnitTests {
         else {
             while (it.hasNext()) {
                 Search.State i = it.next();
+                System.out.println(i);
                 if (!it.hasNext())
                     result = i.getG();
             }
@@ -85,5 +94,20 @@ public class PalletUnitTests {
     @Test(timeout = 60000)
     public void test_dim5_1() {
         test("123456789ABCDEFGHIJKLMNOP", "213456789PBCDEFGHIJKLMNOA", 10);
+    }
+
+    @Test(timeout = 60000)
+    public void test_dim5_2() {
+        test("123456789ABCDEFGHIJKLMNOP", "213456789PBCDEFGHIJKLMNOA", 10);
+    }
+
+    @Test(timeout = 60000)
+    public void test_dim5_3() {
+        test("123456789ABCDEFGHIJKLMNOP", "143256789ABCDEFGHIJKLMNOP", 15);
+    }
+
+    @Test(timeout = 60000)
+    public void test_dim_5_4() {
+        test("123456789ABCDEFGHIJKLMNOP", "P136524987KJIHGFEDCBLANMO", 62);
     }
 }

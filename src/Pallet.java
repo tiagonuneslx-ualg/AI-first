@@ -149,8 +149,10 @@ public class Pallet implements ILayout, Cloneable {
     public String toString() {
         StringBuilder output = new StringBuilder();
         for(int i = 0; i < dim; i++) {
-            for(int j = 0; j < dim; j++)
+            for(int j = 0; j < dim; j++) {
                 output.append(pallet[i * dim + j]);
+                output.append(" ");
+            }
             output.append("\n");
         }
         return output.toString();
