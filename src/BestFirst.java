@@ -1,5 +1,13 @@
 import java.util.*;
 
+/**
+ * A search algorithm that tests the least cost nodes first.
+ *
+ * @author Rafael Duarte
+ * @author Tiago Nunes
+ * @see Search
+ * @see ILayout
+ */
 public class BestFirst extends Search {
 
     private List<State> sucessores(State n) {
@@ -14,6 +22,9 @@ public class BestFirst extends Search {
         return sucs;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     final public Iterator<State> solve(ILayout s, ILayout goal) {
         Queue<State> abertos = new PriorityQueue<>(10, (s1, s2) -> (int) Math.signum(s1.getG() - s2.getG()));

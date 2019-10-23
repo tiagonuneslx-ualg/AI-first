@@ -3,15 +3,30 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * An algorithm to solve problems by state-space search.
+ *
+ * @author Rafael Duarte
+ * @author Tiago Nunes
+ * @see ILayout
+ */
 public abstract class Search {
 
     abstract Iterator<State> solve(ILayout s, ILayout goal);
 
+    /**
+     * A node for the search algorithm, holding a {@link ILayout},
+     * its father, and the accumulated cost from the root to the node.
+     */
     public static class State implements Iterable<State> {
         public ILayout layout;
         public State father;
         private double g;
 
+        /**
+         * @param l a config
+         * @param n the previous node
+         */
         public State(ILayout l, State n) {
             layout = l;
             father = n;
@@ -20,6 +35,9 @@ public abstract class Search {
             else g = 0.0;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public String toString() {
             return layout.toString();
@@ -37,6 +55,11 @@ public abstract class Search {
             return getG() + getH(goal);
         }
 
+        /**
+         * Returns an iterator from the root to the node.
+         *
+         * @return an iterator from the root to the node
+         */
         @Override
         public Iterator<State> iterator() {
             List<State> states = new ArrayList<>();
@@ -49,6 +72,9 @@ public abstract class Search {
             return states.iterator();
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public boolean equals(Object obj) {
             if (obj == this) return true;
@@ -57,6 +83,9 @@ public abstract class Search {
             return layout.equals(s.layout);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public int hashCode() {
             return layout.toString().hashCode();

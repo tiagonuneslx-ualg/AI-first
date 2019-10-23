@@ -3,27 +3,17 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * A Pallet is a grid of numbered containers (cranes).
- * <p>
- * These containers can be exchanged.
+ * Grid of numbered containers (cranes).
  *
- * <table>
- *     <tr>
- *         <td></td> <td>ODD</td> <td>EVEN</td>
- *     </tr>
- *     <tr>
- *         <td>ODD</td> <td>1</td> <td>5</td>
- *     </tr>
- *     <tr>
- *         <td>EVEN</td> <td>5</td> <td>20</td>
- *     </tr>
- * </table>
+ * <p>These containers can be exchanged. The costs of these exchanges vary:
+ * to exchange two odds, the cost is 1, to exchange one odd and one even,
+ * it's 5 and to exchange two even it's 20.
  *
  * @author Rafael Duarte
  * @author Tiago Nunes
  * @see ILayout
  */
-class Pallet implements ILayout, Cloneable {
+public class Pallet implements ILayout, Cloneable {
     private int dim;
     private int[] pallet;
     private double g;
@@ -32,14 +22,14 @@ class Pallet implements ILayout, Cloneable {
      * Constructs a pallet containing the cranes given by the string in the
      * same order, and calculates the dimension based on the string length.
      *
-     * @param str a string with the containers' number in a certain order
+     * @param str a string with the containers' numbers in a certain order
      * @throws IllegalStateException if string length is not a perfect number
      */
     public Pallet(String str) throws IllegalStateException {
         double sqrt = Math.sqrt(str.length());
         dim = (int) sqrt;
         if(dim != sqrt) throw new
-                IllegalStateException("Invalid arg in Board constructor");
+                IllegalStateException("Invalid arg in Pallet constructor");
         pallet = new int[dim * dim];
         for(int i = 0; i < dim * dim; i++)
             pallet[i] = Character.getNumericValue(str.charAt(i));
@@ -73,6 +63,9 @@ class Pallet implements ILayout, Cloneable {
         return a % 2 == 0 && b % 2 == 0 ? 20 : a % 2 == 1 && b % 2 == 1 ? 1 : 5;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<ILayout> children() {
         List<ILayout> result = new ArrayList<>();
@@ -89,11 +82,17 @@ class Pallet implements ILayout, Cloneable {
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public boolean isGoal(ILayout l) {
-        return equals((Pallet) l);
+    public boolean isGoal(ILayout goal) {
+        return equals((Pallet) goal);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object obj) {
         if(obj == this) return true;
@@ -107,16 +106,25 @@ class Pallet implements ILayout, Cloneable {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return toString().hashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getG() {
         return g;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getH(ILayout goal) {
         double result = 0;
@@ -134,6 +142,9 @@ class Pallet implements ILayout, Cloneable {
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         StringBuilder output = new StringBuilder();

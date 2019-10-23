@@ -1,24 +1,44 @@
 import java.util.List;
 
+/**
+ * A configuration of a certain environment.
+ *
+ * <p>In this interface are declared the methods that return the
+ * information needed for a Search algorithm to solve a problem.
+ *
+ * @author Rafael Duarte
+ * @author Tiago Nunes
+ * @see Search
+ */
 public interface ILayout {
     /**
-     * @return the children of the receiver.
+     * Returns the children of the receiver.
+     *
+     * @return the children of the receiver
      */
     List<ILayout> children();
 
     /**
-     * @return true if the receiver equals the argument l;
-     * return false otherwise.
+     * Checks if the receiver equals the config goal.
+     *
+     * @param goal the goal config
+     * @return true if the receiver equals the config goal;
+     * return false otherwise
      */
-    boolean isGoal(ILayout l);
+    boolean isGoal(ILayout goal);
 
     /**
-     * @return the cost for moving from the input config to the receiver.
+     * Returns the cost of moving from the last config to the current one.
+     *
+     * @return the cost of moving from the last config to the current one
      */
     double getG();
 
     /**
-     * @return the heuristic for the current state
+     * The heuristic value of the current config.
+     *
+     * @param goal the goal config
+     * @return the heuristic value of the current config
      */
     double getH(ILayout goal);
 }

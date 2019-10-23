@@ -1,5 +1,19 @@
 import java.util.*;
 
+/**
+ * A search algorithm that tests the nodes depth-first iteratively
+ * with an incremental cut, using f^(n) as the distance between nodes.
+ *
+ * <p>The initial cut is f^(root).
+ *
+ * <p>f^(n) = g(n) + h^(n), where g(n) is the cost of the node n
+ * and h^(n) is the heuristic value of the node n.
+ *
+ * @author Rafael Duarte
+ * @author Tiago Nunes
+ * @see Search
+ * @see ILayout
+ */
 public class IDAStar extends Search {
 
     private List<State> sucessores(State n) {
@@ -14,6 +28,9 @@ public class IDAStar extends Search {
         return sucs;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     final public Iterator<State> solve(ILayout s, ILayout goal) {
         Stack<State> abertos = new Stack<>();

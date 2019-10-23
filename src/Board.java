@@ -1,11 +1,28 @@
 import java.util.ArrayList;
 import java.util.List;
 
-class Board implements ILayout {
+/**
+ * Grid of numbered pieces with one empty square.
+ *
+ * <p>The pieces touching the empty square horizontally or vertically can
+ * exchange positions with the empty square.
+ *
+ * @author Rafael Duarte
+ * @author Tiago Nunes
+ * @see ILayout
+ */
+public class Board implements ILayout {
     private static final int dim = 3;
     private int[][] board;
     private String origin;
 
+    /**
+     * Constructs a board containing the pieces given by the string in the
+     * same order. A 0 means an empty square.
+     *
+     * @param str a string with the pieces' numbers in a certain order
+     * @throws IllegalStateException if string length is not dim * dim
+     */
     public Board(String str) throws IllegalStateException {
         if (str.length() != dim * dim) throw new
                 IllegalStateException("Invalid arg in Board constructor");
@@ -27,6 +44,9 @@ class Board implements ILayout {
         return new Board(result_origin.toString());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<ILayout> children() {
         List<ILayout> result = new ArrayList<>();
@@ -48,11 +68,17 @@ class Board implements ILayout {
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public boolean isGoal(ILayout l) {
-        return equals((Board) l);
+    public boolean isGoal(ILayout goal) {
+        return equals((Board) goal);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
@@ -66,21 +92,34 @@ class Board implements ILayout {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return toString().hashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getG() {
         return 1.0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getH(ILayout goal) {
         return 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String toString() {
         StringBuilder output = new StringBuilder();
         for (int i = 0; i < dim; i++) {
