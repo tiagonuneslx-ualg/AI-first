@@ -14,6 +14,10 @@ public abstract class Search {
 
     abstract Iterator<State> solve(ILayout s, ILayout goal);
 
+    protected int solveD(ILayout s, ILayout goal) {
+        return 0;
+    }
+
     /**
      * A node for the search algorithm, holding a {@link ILayout},
      * its father, and the accumulated cost from the root to the node.
@@ -22,7 +26,7 @@ public abstract class Search {
         public ILayout layout;
         public State father;
         private int g;
-        private double h, f;
+        private ILayout goal;
 
         /**
          * @param l a config
@@ -35,8 +39,7 @@ public abstract class Search {
                 g = father.g + (int) l.getG();
             else g = 0;
             if (goal != null) {
-                this.h = l.getH(goal);
-                this.f = h + g;
+                this.goal = goal;
             }
         }
 
@@ -53,11 +56,11 @@ public abstract class Search {
         }
 
         public int getH() {
-            return (int) h;
+            return (int) layout.getH(goal);
         }
 
         public int getF() {
-            return (int) f;
+            return (int) getG() + getH();
         }
 
         /**

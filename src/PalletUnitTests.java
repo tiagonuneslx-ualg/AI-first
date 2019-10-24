@@ -2,7 +2,6 @@ import org.junit.Test;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Iterator;
 
 import static org.junit.Assert.assertEquals;
 
@@ -12,7 +11,8 @@ public class PalletUnitTests {
         Pallet initial = new Pallet(initial_s);
         Pallet goal = new Pallet(goal_s);
         Search s = new IDAStarRecursive();
-        Iterator<Search.State> it = s.solve(initial, goal);
+        int result = s.solveD(initial, goal);
+        /*Iterator<Search.State> it = s.solve(initial, goal);
         int result = -1;
         if (it == null)
             System.out.println("no solution was found");
@@ -24,7 +24,7 @@ public class PalletUnitTests {
                 if (!it.hasNext())
                     result = i.getG();
             }
-        }
+        }*/
         System.out.println("Solution: " + result);
         assertEquals(expected, result);
     }
@@ -78,6 +78,11 @@ public class PalletUnitTests {
     @Test(timeout = 60000)
     public void test_dim3_5() {
         test("123456789", "134256789", 10);
+    }
+
+    @Test(timeout = 60000)
+    public void test_dim3_6() {
+        test("123456789", "916534278", 23);
     }
 
     @Test(timeout = 60000)

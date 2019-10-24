@@ -19,12 +19,14 @@ public class IDAStarRecursive extends Search {
     private int cut, nextCut;
     private ILayout goal;
     private int tested;
+    private boolean success;
+    private int result = -1;
 
-    private List<State> sucessores(State n) {
+    private List<State> sucessores(State n, ILayout goal) {
         List<State> result = new ArrayList<>();
         List<ILayout> children = n.layout.children();
-        for(ILayout e : children) {
-            if(n.father == null || !e.equals(n.father.layout)) {
+        for (ILayout e : children) {
+            if (n.father == null || !e.equals(n.father.layout)) {
                 State nn = new State(e, n, goal);
                 result.add(nn);
             }
@@ -40,7 +42,7 @@ public class IDAStarRecursive extends Search {
         goal = g;
         State root = new State(s, null, goal);
         cut = root.getH();
-        while(true) {
+        while (true) {
             nextCut = Integer.MAX_VALUE;
             Set<State> closed = new HashSet<>();
             State temp = search(root, closed);
@@ -48,26 +50,60 @@ public class IDAStarRecursive extends Search {
                 System.out.println("Tested: " + tested);
                 return temp.iterator();
             }
-            if(nextCut > cut) cut = nextCut;
+            if (nextCut > cut) cut = nextCut;
             else return null;
         }
     }
 
     private State search(State node, Set<State> closed) {
         int f = node.getF();
-        if(f > cut) {
-            if(f < nextCut) nextCut = f;
+        if (f > cut) {
+            if (f < nextCut) nextCut = f;
             return null;
         }
         tested++;
-        if(node.layout.isGoal(goal)) return node;
+        if (node.layout.isGoal(goal)) return node;
         closed.add(node);
-        for(State suc : sucessores(node)) {
-            if(!closed.contains(suc)) {
+        for (State suc : sucessores(node, goal)) {
+            if (!closed.contains(suc)) {
                 State temp = search(suc, closed);
-                if(temp != null) return temp;
+                if (temp != null) return temp;
             }
         }
         return null;
+    }
+
+    @Override
+    protected int solveD(ILayout s, ILayout goal) {
+        State root = new State(s, null, goal);
+        int threshold = root.getH();
+        int f = threshold;
+        do {
+            Set<State> closed = new HashSet<>();
+            threshold = f;
+            f = searchD(root, threshold, goal, closed);
+        } while (f > threshold);
+        return f;
+    }
+
+    private int searchD(State node, int threshold, ILayout goal, Set<State> closed) {
+        closed.add(node);
+        if (success) return result;
+        int f = node.getF();
+        if (f > threshold)
+            return f;
+        if (node.layout.isGoal(goal)) {
+            result = f;
+            success = true;
+            return f;
+        }
+        int min = Integer.MAX_VALUE;
+        for (State suc : sucessores(node, goal)) {
+            if (!closed.contains(suc)) {
+                int m = searchD(suc, threshold, goal, closed);
+                min = Math.min(m, min);
+            }
+        }
+        return min;
     }
 }
