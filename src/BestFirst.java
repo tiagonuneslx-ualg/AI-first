@@ -15,7 +15,7 @@ public class BestFirst extends Search {
         List<ILayout> children = n.layout.children();
         for (ILayout e : children) {
             if (n.father == null || !e.equals(n.father.layout)) {
-                State nn = new State(e, n);
+                State nn = new State(e, n, null);
                 sucs.add(nn);
             }
         }
@@ -29,7 +29,7 @@ public class BestFirst extends Search {
     final public Iterator<State> solve(ILayout s, ILayout goal) {
         Queue<State> abertos = new PriorityQueue<>(10, (s1, s2) -> (int) Math.signum(s1.getG() - s2.getG()));
         HashSet<State> fechados = new HashSet<>();
-        abertos.offer(new State(s, null));
+        abertos.offer(new State(s, null, null));
         List<State> sucs;
         while (!abertos.isEmpty()) {
             State actual = abertos.poll();

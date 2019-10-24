@@ -16,12 +16,12 @@ import java.util.*;
  */
 public class IDAStar extends Search {
 
-    private List<State> sucessores(State n) {
+    private List<State> sucessores(State n, ILayout goal) {
         List<State> result = new ArrayList<>();
         List<ILayout> children = n.layout.children();
         for(ILayout e : children) {
             if(n.father == null || !e.equals(n.father.layout)) {
-                State nn = new State(e, n);
+                State nn = new State(e, n, goal);
                 result.add(nn);
             }
         }
@@ -37,12 +37,12 @@ public class IDAStar extends Search {
         int tested = 0;
         int iterations = 0;
         Stack<State> abertos = new Stack<>();
-        int cut = new State(s, null).getH(goal);
+        int cut = new State(s, null, goal).getH();
         while(true) {
             iterations++;
             System.out.println("Cut: " + cut);
             HashSet<State> fechados = new HashSet<>();
-            abertos.push(new State(s, null));
+            abertos.push(new State(s, null, goal));
             int nextCut = Integer.MAX_VALUE;
             while(!abertos.isEmpty()) {
                 tested++;
@@ -52,11 +52,11 @@ public class IDAStar extends Search {
                     return actual.iterator();
                 }
                 fechados.add(actual);
-                List<State> sucs = sucessores(actual);
+                List<State> sucs = sucessores(actual, goal);
                 for(State suc : sucs) {
                     generated++;
                     if(!fechados.contains(suc)) {
-                        int f = suc.getF(goal);
+                        int f = suc.getF();
                         if(f <= cut)
                             abertos.push(suc);
                         else if(f < nextCut)

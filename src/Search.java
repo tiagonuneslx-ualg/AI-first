@@ -22,17 +22,22 @@ public abstract class Search {
         public ILayout layout;
         public State father;
         private int g;
+        private double h, f;
 
         /**
          * @param l a config
          * @param n the previous node
          */
-        public State(ILayout l, State n) {
+        public State(ILayout l, State n, ILayout goal) {
             layout = l;
             father = n;
             if (father != null)
                 g = father.g + (int) l.getG();
             else g = 0;
+            if (goal != null) {
+                this.h = l.getH(goal);
+                this.f = h + g;
+            }
         }
 
         /**
@@ -47,12 +52,12 @@ public abstract class Search {
             return g;
         }
 
-        public int getH(ILayout goal) {
-            return (int) layout.getH(goal);
+        public int getH() {
+            return (int) h;
         }
 
-        public int getF(ILayout goal) {
-            return getG() + getH(goal);
+        public int getF() {
+            return (int) f;
         }
 
         /**

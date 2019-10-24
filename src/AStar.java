@@ -13,12 +13,12 @@ import java.util.*;
  */
 public class AStar extends Search {
 
-    private List<State> sucessores(State n) {
+    private List<State> sucessores(State n, ILayout goal) {
         List<State> sucs = new ArrayList<>();
         List<ILayout> children = n.layout.children();
         for (ILayout e : children) {
             if (n.father == null || !e.equals(n.father.layout)) {
-                State nn = new State(e, n);
+                State nn = new State(e, n, goal);
                 sucs.add(nn);
             }
         }
@@ -30,15 +30,15 @@ public class AStar extends Search {
      */
     @Override
     final public Iterator<State> solve(ILayout s, ILayout goal) {
-        Queue<State> abertos = new PriorityQueue<>(10, (s1, s2) -> (int) Math.signum(s1.getF(goal) - s2.getF(goal)));
+        Queue<State> abertos = new PriorityQueue<>(10, (s1, s2) -> (int) Math.signum(s1.getF() - s2.getF()));
         HashSet<State> fechados = new HashSet<>();
-        abertos.offer(new State(s, null));
+        abertos.offer(new State(s, null, goal));
         List<State> sucs;
         while (!abertos.isEmpty()) {
             State actual = abertos.poll();
             if (actual.layout.isGoal(goal))
                 return actual.iterator();
-            sucs = sucessores(actual);
+            sucs = sucessores(actual, goal);
             fechados.add(actual);
             for (State suc : sucs) {
                 if (!fechados.contains(suc))

@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -28,10 +27,10 @@ public class Pallet implements ILayout, Cloneable {
     public Pallet(String str) throws IllegalStateException {
         double sqrt = Math.sqrt(str.length());
         dim = (int) sqrt;
-        if(dim != sqrt) throw new
+        if (dim != sqrt) throw new
                 IllegalStateException("Invalid arg in Pallet constructor");
         pallet = new int[dim * dim];
-        for(int i = 0; i < dim * dim; i++)
+        for (int i = 0; i < dim * dim; i++)
             pallet[i] = Character.getNumericValue(str.charAt(i));
     }
 
@@ -44,9 +43,9 @@ public class Pallet implements ILayout, Cloneable {
     protected Object clone() {
         try {
             Pallet result = (Pallet) super.clone();
-            result.pallet = Arrays.copyOf(pallet, pallet.length);
+            result.pallet = pallet.clone();
             return result;
-        } catch(CloneNotSupportedException e) {
+        } catch (CloneNotSupportedException e) {
             // this shouldn't happen, since we are Cloneable
             throw new InternalError(e);
         }
@@ -69,10 +68,10 @@ public class Pallet implements ILayout, Cloneable {
     @Override
     public List<ILayout> children() {
         List<ILayout> result = new ArrayList<>();
-        for(int i = 0; i < dim * dim - 1; i++) {
-            for(int j = i + 1; j < dim * dim; j++) {
+        for (int i = 0; i < dim * dim - 1; i++) {
+            for (int j = i + 1; j < dim * dim; j++) {
                 double g = calcG(pallet[i], pallet[j]);
-                if(g != 20) {
+                if (g != 20) {
                     Pallet child = exchange(i, j);
                     child.g = calcG(pallet[i], pallet[j]);
                     result.add(child);
@@ -95,12 +94,12 @@ public class Pallet implements ILayout, Cloneable {
      */
     @Override
     public boolean equals(Object obj) {
-        if(obj == this) return true;
-        if(!(obj instanceof Pallet)) return false;
+        if (obj == this) return true;
+        if (!(obj instanceof Pallet)) return false;
         Pallet s = (Pallet) obj;
-        if(pallet.length != s.pallet.length) return false;
-        for(int i = 0; i < pallet.length; i++) {
-            if(pallet[i] != s.pallet[i])
+        if (pallet.length != s.pallet.length) return false;
+        for (int i = 0; i < pallet.length; i++) {
+            if (pallet[i] != s.pallet[i])
                 return false;
         }
         return true;
@@ -127,31 +126,49 @@ public class Pallet implements ILayout, Cloneable {
      */
     @Override
     public double getH(ILayout goal) {
-        int np = 0, ni = 0, ni_in_i = 0;
+        double result = 0;
+        int np = 0, ni = 0;
+        boolean[] index_exchanged = new boolean[36];
         Pallet goalPallet = (Pallet) goal;
-        for(int i = 0; i < dim * dim; i++) {
-            if(pallet[i] != goalPallet.pallet[i]) {
-                if(pallet[i] % 2 == 0) np++;
-                else {
+        for (int i = 0; i < dim * dim; i++) {
+            if (index_exchanged[i]) continue;
+            if (pallet[i] != goalPallet.pallet[i]) {
+                if (pallet[i] % 2 == 0) {
+                    np++;
+                    for (int j = i + 1; j < dim * dim; j++) {
+                        if (!index_exchanged[j] && pallet[j] % 2 == 0 && pallet[i] == goalPallet.pallet[j] && pallet[j] == goalPallet.pallet[i]) {
+                            result += 15;
+                            index_exchanged[i] = true;
+                            index_exchanged[j] = true;
+                            j = dim * dim;
+                        }
+                    }
+                    if (!index_exchanged[i]) {
+                        result += 5;
+                    }
+                } else {
                     ni++;
-                    if(goalPallet.pallet[i] % 2 == 1) ni_in_i++;
+                    for (int j = i + 1; j < dim * dim; j++) {
+                        if (!index_exchanged[j] && pallet[j] % 2 == 1 && pallet[i] == goalPallet.pallet[j] && pallet[j] == goalPallet.pallet[i]) {
+                            result += 1;
+                            index_exchanged[i] = true;
+                            index_exchanged[j] = true;
+                            j = dim * dim;
+                        }
+                    }
+                    if (!index_exchanged[i]) {
+                        if (goalPallet.pallet[i] % 2 == 1) {
+                            result++;
+                        }
+                    }
                 }
             }
         }
         /*
+        result = np*5;
         if(ni > np)
-            result = np * 5 + (double) (ni - np) / 2 + 0.5;
-        else if (ni == 0 && np > 0)
-            result = np * 5 + 5;
-        else
-            result = np * 5;
-        return result;
+            result += (int) ((double) (ni-np)/2 + 0.5);
          */
-        double result = np * 5;
-        if(ni == 0 && np > 0) result += 5;
-        else {
-            result += (int) ((double) (ni_in_i / 2) + 0.5);
-        }
         return result;
     }
 
@@ -161,8 +178,8 @@ public class Pallet implements ILayout, Cloneable {
     @Override
     public String toString() {
         StringBuilder output = new StringBuilder();
-        for(int i = 0; i < dim; i++) {
-            for(int j = 0; j < dim; j++) {
+        for (int i = 0; i < dim; i++) {
+            for (int j = 0; j < dim; j++) {
                 output.append(pallet[i * dim + j]);
                 output.append(" ");
             }

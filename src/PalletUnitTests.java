@@ -17,6 +17,7 @@ public class PalletUnitTests {
         if (it == null)
             System.out.println("no solution was found");
         else {
+            System.out.println("First Cut: " + it.next().getH());
             while (it.hasNext()) {
                 Search.State i = it.next();
                 System.out.println(i);
@@ -24,6 +25,7 @@ public class PalletUnitTests {
                     result = i.getG();
             }
         }
+        System.out.println("Solution: " + result);
         assertEquals(expected, result);
     }
 
@@ -32,8 +34,8 @@ public class PalletUnitTests {
         Pallet b = new Pallet("1324");
         StringWriter writer = new StringWriter();
         PrintWriter pw = new PrintWriter(writer);
-        pw.println("13");
-        pw.println("24");
+        pw.println("1 3 ");
+        pw.println("2 4 ");
         assertEquals(writer.toString(), b.toString());
         pw.close();
     }
@@ -106,5 +108,10 @@ public class PalletUnitTests {
     @Test(timeout = 60000)
     public void test_dim_5_4() {
         test("123456789ABCDEFGHIJKLMNOP", "P136524987KJIHGFEDCBLANMO", 62);
+    }
+
+    @Test(timeout = 60000)
+    public void test_dim_5_5() {
+        test("123456789ABCDEFGHIJKLMNOP", "P13562498EKJHIGF7DBMLONCA", 66);
     }
 }
