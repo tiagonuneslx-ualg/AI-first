@@ -66,7 +66,7 @@ public class Pallet implements ILayout, Cloneable {
      * {@inheritDoc}
      */
     @Override
-    public List<ILayout> children() {
+    final public List<ILayout> children() {
         List<ILayout> result = new ArrayList<>();
         for (int i = 0; i < dim * dim - 1; i++) {
             for (int j = i + 1; j < dim * dim; j++) {
@@ -85,7 +85,7 @@ public class Pallet implements ILayout, Cloneable {
      * {@inheritDoc}
      */
     @Override
-    public boolean isGoal(ILayout goal) {
+    final public boolean isGoal(ILayout goal) {
         return equals(goal);
     }
 
@@ -109,7 +109,7 @@ public class Pallet implements ILayout, Cloneable {
      * {@inheritDoc}
      */
     @Override
-    public int hashCode() {
+    final public int hashCode() {
         return toString().hashCode();
     }
 
@@ -125,35 +125,40 @@ public class Pallet implements ILayout, Cloneable {
      * {@inheritDoc}
      */
     @Override
-    public double getH(ILayout goal) {
+    final public double getH(ILayout goal) {
         double result = 0;
-        int np = 0, ni = 0;
-        boolean[] index_exchanged = new boolean[36];
+        boolean[] index_exchanged = new boolean[dim * dim];
         Pallet goalPallet = (Pallet) goal;
         for (int i = 0; i < dim * dim; i++) {
             if (index_exchanged[i]) continue;
             if (pallet[i] != goalPallet.pallet[i]) {
                 if (pallet[i] % 2 == 0) {
-                    np++;
                     for (int j = i + 1; j < dim * dim; j++) {
-                        if (!index_exchanged[j] && pallet[j] % 2 == 0 && pallet[i] == goalPallet.pallet[j] && pallet[j] == goalPallet.pallet[i]) {
-                            result += 15;
+                        if (!index_exchanged[j] && pallet[i] == goalPallet.pallet[j] && pallet[j] == goalPallet.pallet[i]) {
+                            if (pallet[j] % 2 == 0) {
+                                result += 15;
+                            } else {
+                                result += 5;
+                            }
                             index_exchanged[i] = true;
                             index_exchanged[j] = true;
-                            j = dim * dim;
+                            break;
                         }
                     }
                     if (!index_exchanged[i]) {
                         result += 5;
                     }
                 } else {
-                    ni++;
                     for (int j = i + 1; j < dim * dim; j++) {
-                        if (!index_exchanged[j] && pallet[j] % 2 == 1 && pallet[i] == goalPallet.pallet[j] && pallet[j] == goalPallet.pallet[i]) {
-                            result += 1;
+                        if (!index_exchanged[j] && pallet[i] == goalPallet.pallet[j] && pallet[j] == goalPallet.pallet[i]) {
+                            if (pallet[j] % 2 == 1) {
+                                result += 1;
+                            } else {
+                                result += 5;
+                            }
                             index_exchanged[i] = true;
                             index_exchanged[j] = true;
-                            j = dim * dim;
+                            break;
                         }
                     }
                     if (!index_exchanged[i]) {
@@ -164,11 +169,6 @@ public class Pallet implements ILayout, Cloneable {
                 }
             }
         }
-        /*
-        result = np*5;
-        if(ni > np)
-            result += (int) ((double) (ni-np)/2 + 0.5);
-         */
         return result;
     }
 
@@ -176,7 +176,7 @@ public class Pallet implements ILayout, Cloneable {
      * {@inheritDoc}
      */
     @Override
-    public String toString() {
+    final public String toString() {
         StringBuilder output = new StringBuilder();
         for (int i = 0; i < dim; i++) {
             for (int j = 0; j < dim; j++) {
