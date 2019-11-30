@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * An algorithm to solve problems by state-space search.
@@ -16,6 +13,32 @@ public abstract class Search {
 
     protected int solveD(ILayout s, ILayout goal) {
         return 0;
+    }
+
+    // Successors with heuristics
+    protected List<State> sucessores(State n, ILayout goal) {
+        List<State> sucs = new ArrayList<>();
+        List<ILayout> children = n.layout.children();
+        for (ILayout e : children) {
+            if (n.father == null || !e.equals(n.father.layout)) {
+                State nn = new State(e, n, goal);
+                sucs.add(nn);
+            }
+        }
+        return sucs;
+    }
+
+    // Successors without heuristics
+    protected List<State> sucessores(State n) {
+        List<State> sucs = new ArrayList<>();
+        List<ILayout> children = n.layout.children();
+        for (ILayout e : children) {
+            if (n.father == null || !e.equals(n.father.layout)) {
+                State nn = new State(e, n, null);
+                sucs.add(nn);
+            }
+        }
+        return sucs;
     }
 
     /**
@@ -41,6 +64,11 @@ public abstract class Search {
             if (goal != null) {
                 this.goal = goal;
             }
+        }
+
+        public State randomSuccessor(Set<State> closed) {
+            State result = new State(layout.randomChild(), this, goal);
+            return result;
         }
 
         /**
@@ -99,5 +127,4 @@ public abstract class Search {
             return layout.toString().hashCode();
         }
     }
-
 }

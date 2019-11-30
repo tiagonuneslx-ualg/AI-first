@@ -13,24 +13,16 @@ import java.util.*;
  */
 public class AStar extends Search {
 
-    private List<State> sucessores(State n, ILayout goal) {
-        List<State> sucs = new ArrayList<>();
-        List<ILayout> children = n.layout.children();
-        for (ILayout e : children) {
-            if (n.father == null || !e.equals(n.father.layout)) {
-                State nn = new State(e, n, goal);
-                sucs.add(nn);
-            }
-        }
-        return sucs;
-    }
+    private static final int N_SIMULATIONS = 30;
+    private static final int SIMULATION_DEPTH = 10;
+
 
     /**
      * {@inheritDoc}
      */
     @Override
     final public Iterator<State> solve(ILayout s, ILayout goal) {
-        Queue<State> abertos = new PriorityQueue<>(10, (s1, s2) -> (int) Math.signum(s1.getF() - s2.getF()));
+        Queue<State> abertos = new PriorityQueue<>(10, (s1, s2) -> (int) Math.signum(simulation(s1, goal) - simulation(s2, goal)));
         HashSet<State> fechados = new HashSet<>();
         abertos.offer(new State(s, null, goal));
         List<State> sucs;
@@ -46,5 +38,23 @@ public class AStar extends Search {
             }
         }
         return null;
+    }
+
+    private int simulation(State node, ILayout goal) {
+        int result = Integer.MAX_VALUE;
+        for (int i = 0; i < N_SIMULATIONS; i++) {
+            State cursor = node;
+            Set<State> closed = new HashSet<>();
+            closed.add(cursor);
+            int simulationCost = 0;
+            for (int j = 0; j < SIMULATION_DEPTH; j++) {
+                cursor = node.randomSuccessor(closed);
+                closed.add(cursor);
+                simulationCost += cursor.layout.getG();
+                if (cursor.layout.isGoal(goal)) break;
+            }
+            result = Math.min(result, simulationCost);
+        }
+        return result;
     }
 }

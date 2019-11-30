@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Grid of numbered containers (cranes).
@@ -16,6 +17,7 @@ public class Pallet implements ILayout, Cloneable {
     private int dim;
     private int[] pallet;
     private double g;
+    private Random random = new Random();
 
     /**
      * Constructs a pallet containing the cranes given by the string in the
@@ -79,6 +81,16 @@ public class Pallet implements ILayout, Cloneable {
             }
         }
         return result;
+    }
+
+    @Override
+    public ILayout randomChild() {
+        int randomIndex = random.nextInt(dim - 1);
+        int randomIndex2 = random.nextInt(dim - 1);
+        randomIndex2 = randomIndex2 >= randomIndex ? randomIndex2 + 1 : randomIndex2;
+        Pallet child = exchange(randomIndex, randomIndex2);
+        child.g = calcG(pallet[randomIndex], pallet[randomIndex2]);
+        return child;
     }
 
     /**

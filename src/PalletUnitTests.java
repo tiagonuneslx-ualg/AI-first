@@ -2,6 +2,7 @@ import org.junit.Test;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Iterator;
 
 import static org.junit.Assert.assertEquals;
 
@@ -10,21 +11,20 @@ public class PalletUnitTests {
     public static void test(String initial_s, String goal_s, int expected) {
         Pallet initial = new Pallet(initial_s);
         Pallet goal = new Pallet(goal_s);
-        Search s = new IDAStarRecursive();
-        int result = s.solveD(initial, goal);
-        /*Iterator<Search.State> it = s.solve(initial, goal);
+        //Search s = new IDAStarRecursive();
+        //int result = s.solveD(initial, goal);
+        MCTS2 s = new MCTS2();
+        Iterator<MCTS2.Node> it = s.solve(initial, goal);
         int result = -1;
         if (it == null)
             System.out.println("no solution was found");
         else {
-            System.out.println("First Cut: " + it.next().getH());
             while (it.hasNext()) {
-                Search.State i = it.next();
-                System.out.println(i);
+                MCTS2.Node i = it.next();
                 if (!it.hasNext())
-                    result = i.getG();
+                    result = i.g;
             }
-        }*/
+        }
         System.out.println("Solution: " + result);
         assertEquals(expected, result);
     }
@@ -38,6 +38,11 @@ public class PalletUnitTests {
         pw.println("2 4 ");
         assertEquals(writer.toString(), b.toString());
         pw.close();
+    }
+
+    @Test(timeout = 60000)
+    public void test_dim2_instant() {
+        test("1234", "1234", 0);
     }
 
     @Test(timeout = 60000)
@@ -60,27 +65,27 @@ public class PalletUnitTests {
         test("123456789", "213456789", 5);
     }
 
-    @Test(timeout = 60000)
+    @Test(timeout = 5000)
     public void test_dim3_2() {
         test("123456789", "143256789", 15);
     }
 
-    @Test(timeout = 60000)
+    @Test(timeout = 5000)
     public void test_dim3_3() {
         test("123456789", "576891324", 24);
     }
 
-    @Test(timeout = 60000)
+    @Test(timeout = 5000)
     public void test_dim3_4() {
         test("123456789", "987654321", 32);
     }
 
-    @Test(timeout = 60000)
+    @Test(timeout = 5000)
     public void test_dim3_5() {
         test("123456789", "134256789", 10);
     }
 
-    @Test(timeout = 60000)
+    @Test(timeout = 5000)
     public void test_dim3_6() {
         test("123456789", "916534278", 23);
     }

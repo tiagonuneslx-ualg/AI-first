@@ -18,6 +18,10 @@ public interface ILayout {
      */
     List<ILayout> children();
 
+    default ILayout randomChild() {
+        return null;
+    }
+
     /**
      * Checks if the receiver equals the config goal.
      *

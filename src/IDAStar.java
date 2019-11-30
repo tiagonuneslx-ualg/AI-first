@@ -1,4 +1,7 @@
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Stack;
 
 /**
  * A search algorithm that tests the nodes depth-first iteratively
@@ -15,18 +18,6 @@ import java.util.*;
  * @see ILayout
  */
 public class IDAStar extends Search {
-
-    private List<State> sucessores(State n, ILayout goal) {
-        List<State> result = new ArrayList<>();
-        List<ILayout> children = n.layout.children();
-        for(ILayout e : children) {
-            if(n.father == null || !e.equals(n.father.layout)) {
-                State nn = new State(e, n, goal);
-                result.add(nn);
-            }
-        }
-        return result;
-    }
 
     /**
      * {@inheritDoc}

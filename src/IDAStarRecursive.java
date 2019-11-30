@@ -1,4 +1,6 @@
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * A search algorithm that tests the nodes depth-first iteratively
@@ -16,61 +18,52 @@ import java.util.*;
  */
 public class IDAStarRecursive extends Search {
 
-    private int cut, nextCut;
+    private int threshold;
+    private Set<State> closed;
+    private State solution;
     private ILayout goal;
-    private int tested;
     private boolean success;
     private int result = -1;
-
-    private List<State> sucessores(State n, ILayout goal) {
-        List<State> result = new ArrayList<>();
-        List<ILayout> children = n.layout.children();
-        for (ILayout e : children) {
-            if (n.father == null || !e.equals(n.father.layout)) {
-                State nn = new State(e, n, goal);
-                result.add(nn);
-            }
-        }
-        return result;
-    }
 
     /**
      * {@inheritDoc}
      */
     @Override
     final public Iterator<State> solve(ILayout s, ILayout g) {
+        State root = new State(s, null, g);
+        threshold = root.getH();
         goal = g;
-        State root = new State(s, null, goal);
-        cut = root.getH();
+        solution = null;
         while (true) {
-            nextCut = Integer.MAX_VALUE;
-            Set<State> closed = new HashSet<>();
-            State temp = search(root, closed);
-            if (temp != null) {
-                System.out.println("Tested: " + tested);
-                return temp.iterator();
-            }
-            if (nextCut > cut) cut = nextCut;
-            else return null;
+            closed = new HashSet<>();
+            State result = search(root);
+            if (result.layout.isGoal(g)) return result.iterator();
+            if (result.getF() <= threshold) return null;
+            else threshold = result.getF();
         }
     }
 
-    private State search(State node, Set<State> closed) {
-        int f = node.getF();
-        if (f > cut) {
-            if (f < nextCut) nextCut = f;
-            return null;
-        }
-        tested++;
-        if (node.layout.isGoal(goal)) return node;
+    private State search(State node) {
         closed.add(node);
+        if (solution != null) return solution;
+        if (node.getF() > threshold) return node;
+        if (node.layout.isGoal(goal)) {
+            solution = node;
+            return node;
+        }
+        State min = null;
         for (State suc : sucessores(node, goal)) {
             if (!closed.contains(suc)) {
-                State temp = search(suc, closed);
-                if (temp != null) return temp;
+                State temp = search(suc);
+                min = minF(min, temp);
             }
         }
-        return null;
+        return min;
+    }
+
+    private State minF(State a, State b) {
+        if (a == null) return b;
+        return a.getF() < b.getF() ? a : b;
     }
 
     @Override

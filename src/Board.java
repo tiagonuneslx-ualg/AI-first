@@ -84,7 +84,7 @@ public class Board implements ILayout {
         if (obj == this) return true;
         if (!(obj instanceof Board)) return false;
         Board s = (Board) obj;
-        if(board.length != s.board.length) return false;
+        if (board.length != s.board.length) return false;
         for (int i = 0; i < board.length; i++) {
             if (board[i] != s.board[i])
                 return false;

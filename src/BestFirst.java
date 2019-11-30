@@ -10,18 +10,6 @@ import java.util.*;
  */
 public class BestFirst extends Search {
 
-    private List<State> sucessores(State n) {
-        List<State> sucs = new ArrayList<>();
-        List<ILayout> children = n.layout.children();
-        for (ILayout e : children) {
-            if (n.father == null || !e.equals(n.father.layout)) {
-                State nn = new State(e, n, null);
-                sucs.add(nn);
-            }
-        }
-        return sucs;
-    }
-
     /**
      * {@inheritDoc}
      */
