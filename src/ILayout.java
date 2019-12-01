@@ -22,7 +22,7 @@ public interface ILayout {
         return null;
     }
 
-    default ILayout randomChild() {
+    default ILayout randomChild(ILayout goal) {
         return null;
     }
 

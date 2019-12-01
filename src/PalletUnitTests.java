@@ -13,16 +13,16 @@ public class PalletUnitTests {
         Pallet goal = new Pallet(goal_s);
         //Search s = new IDAStarRecursive();
         //int result = s.solveD(initial, goal);
-        MCTS2 s = new MCTS2();
-        Iterator<MCTS2.Node> it = s.solve(initial, goal);
+        MCTS s = new MCTS();
+        Iterator<MCTS.Node> it = s.solve(initial, goal);
         int result = -1;
         if (it == null)
             System.out.println("no solution was found");
         else {
             while (it.hasNext()) {
-                MCTS2.Node i = it.next();
+                MCTS.Node i = it.next();
                 if (!it.hasNext())
-                    result = i.g;
+                    result = i.getF();
             }
         }
         System.out.println("Solution: " + result);

@@ -22,7 +22,7 @@ public class AStar extends Search {
      */
     @Override
     final public Iterator<State> solve(ILayout s, ILayout goal) {
-        Queue<State> abertos = new PriorityQueue<>(10, (s1, s2) -> (int) Math.signum(simulation(s1, goal) - simulation(s2, goal)));
+        Queue<State> abertos = new PriorityQueue<>(10, (s1, s2) -> (int) Math.signum(s1.getF() - s2.getF()));
         HashSet<State> fechados = new HashSet<>();
         abertos.offer(new State(s, null, goal));
         List<State> sucs;
@@ -38,23 +38,5 @@ public class AStar extends Search {
             }
         }
         return null;
-    }
-
-    private int simulation(State node, ILayout goal) {
-        int result = Integer.MAX_VALUE;
-        for (int i = 0; i < N_SIMULATIONS; i++) {
-            State cursor = node;
-            Set<State> closed = new HashSet<>();
-            closed.add(cursor);
-            int simulationCost = 0;
-            for (int j = 0; j < SIMULATION_DEPTH; j++) {
-                cursor = node.randomSuccessor(closed);
-                closed.add(cursor);
-                simulationCost += cursor.layout.getG();
-                if (cursor.layout.isGoal(goal)) break;
-            }
-            result = Math.min(result, simulationCost);
-        }
-        return result;
     }
 }
