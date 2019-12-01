@@ -18,6 +18,10 @@ public interface ILayout {
      */
     List<ILayout> children();
 
+    default List<ILayout> children(ILayout goal) {
+        return null;
+    }
+
     default ILayout randomChild() {
         return null;
     }

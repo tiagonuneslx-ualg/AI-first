@@ -65,27 +65,27 @@ public class PalletUnitTests {
         test("123456789", "213456789", 5);
     }
 
-    @Test(timeout = 5000)
+    @Test(timeout = 60000)
     public void test_dim3_2() {
         test("123456789", "143256789", 15);
     }
 
-    @Test(timeout = 5000)
+    @Test(timeout = 60000)
     public void test_dim3_3() {
         test("123456789", "576891324", 24);
     }
 
-    @Test(timeout = 5000)
+    @Test(timeout = 60000)
     public void test_dim3_4() {
         test("123456789", "987654321", 32);
     }
 
-    @Test(timeout = 5000)
+    @Test(timeout = 60000)
     public void test_dim3_5() {
         test("123456789", "134256789", 10);
     }
 
-    @Test(timeout = 5000)
+    @Test(timeout = 60000)
     public void test_dim3_6() {
         test("123456789", "916534278", 23);
     }

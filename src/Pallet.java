@@ -84,9 +84,25 @@ public class Pallet implements ILayout, Cloneable {
     }
 
     @Override
+    final public List<ILayout> children(ILayout goal) {
+        List<ILayout> result = new ArrayList<>();
+        for (int i = 0; i < dim * dim - 1; i++) {
+            for (int j = i + 1; j < dim * dim; j++) {
+                double g = calcG(pallet[i], pallet[j]);
+                if (g != 20 && pallet[i] != ((Pallet) goal).pallet[i]) {
+                    Pallet child = exchange(i, j);
+                    child.g = calcG(pallet[i], pallet[j]);
+                    result.add(child);
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
     public ILayout randomChild() {
-        int randomIndex = random.nextInt(dim - 1);
-        int randomIndex2 = random.nextInt(dim - 1);
+        int randomIndex = random.nextInt(dim * dim - 1);
+        int randomIndex2 = random.nextInt(dim * dim - 1);
         randomIndex2 = randomIndex2 >= randomIndex ? randomIndex2 + 1 : randomIndex2;
         Pallet child = exchange(randomIndex, randomIndex2);
         child.g = calcG(pallet[randomIndex], pallet[randomIndex2]);
